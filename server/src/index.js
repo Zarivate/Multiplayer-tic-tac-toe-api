@@ -11,11 +11,11 @@ app.use(cors());
 // Function used here so middleware can be used to the routes and have JSON be accepted as a form of data from the frontend
 app.use(express.json());
 
-const api_key = process.env.STREAM_IO_APIKEY;
-const api_secret = process.env.STREAM_IO_SECRET;
+const api_key = process.env.REACT_APP_STREAM_IO_APIKEY;
+const api_secret = process.env.REACT_APP_STREAM_IO_SECRET;
 
 // .getInstance used to make this an instance of the stream chat api
-const serverClient = new StreamChat.getInstance(api_key, api_secret);
+const serverClient = StreamChat.getInstance(api_key, api_secret);
 
 // Normally these two routes would go in a route folder but since only two, figured would be simpler too just have both here
 
@@ -41,7 +41,40 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-app.post("/login");
+app.post("/login", async (req, res) => {
+  try {
+    // The username and password sent from the body of the request are retrieved
+    const { username, password } = req.body;
+
+    // Stream API used to query for a user to see if it exists. Will return an array of users with matching username
+    const { users } = await serverClient.queryUsers({ name: username });
+
+    // If the returned users aray is empty, then return message
+    if (users.length === 0) return res.json({ message: "User not found" });
+
+    // Because password in the server is hashed, they have to be encrypted the same way before attempting to match them
+    const passwordMatch = await bcrypt.compare(
+      password,
+      users[0].hashedPassword
+    );
+
+    // Create user token to ensure tokens match between user in Stream and user attempting to log in
+    const token = serverClient.createToken(users[0].id);
+
+    // If a passwordMatch is found/true, then let the login happen
+    if (passwordMatch) {
+      res.json({
+        token,
+        firstName: users[0].firstName,
+        lastName: users[0].lastName,
+        username,
+        userId: users[0].id,
+      });
+    }
+  } catch (error) {
+    res.json(error);
+  }
+});
 
 app.listen(3001, () => {
   console.log("Server is running on port 3001");

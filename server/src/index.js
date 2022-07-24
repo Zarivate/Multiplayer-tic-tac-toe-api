@@ -11,8 +11,8 @@ app.use(cors());
 // Function used here so middleware can be used to the routes and have JSON be accepted as a form of data from the frontend
 app.use(express.json());
 
-const api_key = process.env.REACT_APP_STREAM_IO_APIKEY;
-const api_secret = process.env.REACT_APP_STREAM_IO_SECRET;
+const api_key = process.env.REACT_APP_API_KEY;
+const api_secret = process.env.REACT_APP_SECRET;
 
 // .getInstance used to make this an instance of the stream chat api
 const serverClient = StreamChat.getInstance(api_key, api_secret);

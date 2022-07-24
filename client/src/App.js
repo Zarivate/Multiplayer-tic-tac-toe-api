@@ -8,7 +8,7 @@ import { useState } from "react";
 import JoinGame from "./components/JoinGame";
 
 function App() {
-  const api_key = process.env.REACT_APP_STREAM_IO_APIKEY;
+  const api_key = process.env.REACT_APP_API_KEY;
   const cookies = new Cookies();
 
   // Attempt to get user Token if has been set already. If so means someone has logged in, else not.

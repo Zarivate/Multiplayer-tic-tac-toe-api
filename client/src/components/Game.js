@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import Board from "./Board";
+import { Window, MessageList, MessageInput } from "stream-chat-react";
 
 function Game({ channel }) {
   const [playersJoined, setPlayersJoined] = useState(
     channel.state.watcher_count === 2
   );
+
+  const [result, setResult] = useState({ winner: "none", state: "none" });
 
   // Will listen for when another player joins so both players can have the same things on screen at the same time.
   // Without this, one user would be unable to detect when another has joined their game
@@ -21,7 +24,7 @@ function Game({ channel }) {
 
   return (
     <div className="gameContainer">
-      <Board />
+      <Board result={result} setResult={setResult} />
       {/* CHAT COMPONENTS GO HERE */}
       {/* LEAVE BUTTON */}
     </div>

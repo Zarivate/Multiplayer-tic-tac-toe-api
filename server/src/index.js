@@ -50,7 +50,9 @@ app.post("/login", async (req, res) => {
     const { users } = await serverClient.queryUsers({ name: username });
 
     // If the returned users aray is empty, then return message
-    if (users.length === 0) return res.json({ message: "User not found" });
+    if (users.length === 0) {
+      return res.json({ message: "User not found" });
+    }
 
     // Because password in the server is hashed, they have to be encrypted the same way before attempting to match them
     const passwordMatch = await bcrypt.compare(

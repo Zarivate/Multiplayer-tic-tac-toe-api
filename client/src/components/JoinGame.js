@@ -2,6 +2,7 @@ import React, { useState } from "react";
 // Hook to allow access to client passed in from App.js
 import { useChatContext, Channel } from "stream-chat-react";
 import Game from "./Game";
+import CustomInput from "./CustomInput";
 
 function JoinGame() {
   const [rivalUsername, setRivalUsername] = useState("");
@@ -31,8 +32,9 @@ function JoinGame() {
     <>
       {/* If the channel does exist/isn't null like it is as default */}
       {channel ? (
-        <Channel channel={channel}>
-          <Game channel={channel} />
+        // Allows for user's message to appear on opponent's screen and vice versa
+        <Channel channel={channel} Input={CustomInput}>
+          <Game channel={channel} setChannel={setChannel} />
         </Channel>
       ) : (
         <div className="joinGame">

@@ -17,8 +17,8 @@ function Board({ result, setResult }) {
 
   // Whenever a user clicks a square, checks for a winning patter
   useEffect(() => {
-    checkWin();
     checkTie();
+    checkWin();
   }, [board]);
 
   const chooseSquare = async (square) => {
@@ -65,7 +65,6 @@ function Board({ result, setResult }) {
       });
 
       if (foundWinningPattern) {
-        alert("Winner ", board[currPattern[0]]);
         setResult({ winner: board[currPattern[0]], state: "won" });
       }
     });
@@ -82,7 +81,6 @@ function Board({ result, setResult }) {
     });
 
     if (filled) {
-      alert("Game Tied ");
       setResult({ winner: "No one", state: "tie" });
     }
   };
